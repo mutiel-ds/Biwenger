@@ -1,7 +1,12 @@
+.env
 .venv
+
 *.ipynb
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
+
 .ipython/
 jupyter_notebook_config.py
 jupyter_notebook_config.json
+
+src/__pycache__/
