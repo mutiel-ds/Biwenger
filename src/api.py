@@ -1,53 +1,145 @@
-import logging
-
-import requests
-from requests import Response
-
+import os
+import time
 import json
-from typing import Dict
+import logging
+from datetime import datetime
+from typing import Dict, Optional
 
-from auth import login
-from config import COMPETITION_URL, USER_AGENT
+from wrapper import Extractor
+
+from config import PICAS, SOFASCORE, MEDIA
 from config import BIWENGER_EMAIL, BIWENGER_PASSWORD
 
-# Configuración de logging (si aún no está configurado en otro módulo)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def get_competition_data(token: str) -> Dict | None:
-    """
-    Consulta datos de la competición (ej. La Liga) usando la API interna de Biwenger.
-    Retorna el JSON con los datos o None en caso de error.
-    """
-    headers: Dict[str, str] = {
-        "Authorization": f"Bearer {token}",
-        "User-Agent": USER_AGENT
-    }
+class BiwengerAPI:
+    def __init__(self, email: str, password: str) -> None:
+        self.email: str = email
+        self.password: str = password
+        self.extractor: Extractor = Extractor(email=self.email, password=self.password)
+
+    def _get_score_folder(self, score: int) -> str:
+        """
+        Devuelve el nombre de la carpeta donde se guardarán los datos de la temporada.
+
+        Args:
+            score (int): Sistema de puntuación.
+        """
+        if score == PICAS:
+            return "Picas"
+        elif score == SOFASCORE:
+            return "SofaScore"
+        elif score == MEDIA:
+            return "Media"
+        else:
+            raise ValueError("Sistema de puntuación no soportado.")
+        
+    def _is_valid_json(self, path: str) -> bool:
+        """
+        Comprueba si un archivo JSON es válido.
+
+        Args:
+            path (str): Ruta del archivo JSON.
+        """
+        try:
+            with open(file=path, mode="r", encoding="utf-8") as file:
+                data: Dict = json.load(fp=file)
+                return (
+                    isinstance(data, dict)
+                    and "status" in data
+                    and data["status"] == 200
+                    and "data" in data
+                    and data["data"] is not None
+                )
+        except (json.JSONDecodeError, FileNotFoundError):
+            return False
+        
+    def _get_season_json(self, year: int, score: int) -> Dict:
+        """
+        Obtiene los datos de la temporada 'year' en formato JSON.
+        
+        Args:
+            year (int): Año de la temporada.
+            score (int): Sistema de puntuación a utilizar.
+        """
+        return self.extractor.get_season_data(year=year, score=score)
     
-    try:
-        response: Response = requests.get(url=COMPETITION_URL, headers=headers, timeout=10)
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        logging.error(msg=f"Error al obtener datos de la competición: {e}")
-        return None
+    def _get_round_json(self, round: Optional[int]) -> Dict:
+        """
+        Obtiene los datos de la jornada 'round' en formato JSON.
+        
+        Args:
+            round (int): Número de la jornada.
+        """
+        return self.extractor.get_round_data(round=round)
 
-    try:
-        data: Dict = response.json()
-    except ValueError as e:
-        logging.error(msg=f"Error al parsear la respuesta JSON de la competición: {e}")
-        return None
+    def save_seasons_data(self, score: int = PICAS) -> None:
+        """
+        Guarda los datos de las temporadas en formato JSON.
 
-    logging.info(msg="Datos de competición obtenidos exitosamente.")
-    return data
+        Args:
+            score (int): Sistema de puntuación a utilizar
+        """
+        score_folder: str = self._get_score_folder(score=score)
+        logging.info(msg=f"Guardando datos de las temporadas en 'data/{score_folder}/Seasons'...")
+        
+        for year in range(2015, datetime.now().year + 1):
+            season_data: Dict = self._get_season_json(year=year, score=score)
+            
+            logging.info(msg=f"\t-Guardando datos de la temporada {year}...")
+            with open(file=f"data/{score_folder}/Seasons/{year}.json", mode="w", encoding="utf-8") as file:
+                json.dump(
+                    obj=season_data,
+                    fp=file,
+                    indent=4,
+                    ensure_ascii=False
+                )
+
+            logging.info(msg=f"\t-Datos de la temporada {year} guardados correctamente.")
+            time.sleep(2)
+
+    def save_rounds_data(self, score: int = PICAS) -> None:
+        """
+        Guarda los datos de las jornadas en formato JSON.
+
+        Args:
+            score (int): Sistema de puntuación a utilizar
+        """
+        score_folder: str = self._get_score_folder(score=score)
+        logging.info(msg=f"Guardando datos de las jornadas en 'data/{score_folder}/Rounds'...")
+
+        for season in os.listdir(path=f"data/{score_folder}/Seasons"):
+            season: str = season.split(sep=".")[0]
+
+            if not os.path.exists(f"data/{score_folder}/Rounds/{season}"):
+                os.makedirs(name=f"data/{score_folder}/Rounds/{season}")
+
+            with open(file=f"data/{score_folder}/Seasons/{season}.json", mode="r", encoding="utf-8") as file:
+                season_data: Dict = json.load(fp=file)
+            
+            logging.info(msg=f"\t-Guardando datos de las jornadas de la temporada {season}...")
+            for round in season_data["data"]["rounds"]:
+                round_id: int = round["id"]
+                round_name: str = round["short"]
+
+                round_path: str = f"data/{score_folder}/Rounds/{season}/{round_name}.json"
+                if os.path.exists(round_path) and self._is_valid_json(path=round_path):
+                    logging.info(msg=f"\t\t-Datos de la jornada {round_name} ya guardados. Continuando...")
+                    continue
+
+                logging.info(msg=f"\t\t-Guardando datos de la jornada {round_name}...")
+                round_data: Dict = self._get_round_json(round=round_id)
+                with open(file=f"data/{score_folder}/Rounds/{season}/{round_name}.json", mode="w", encoding="utf-8") as file:
+                    json.dump(
+                        obj=round_data,
+                        fp=file,
+                        indent=4,
+                        ensure_ascii=False
+                    )
+
+                logging.info(msg=f"\t\t-Datos de la jornada {round_name} guardados correctamente.")
+                time.sleep(2)
 
 if __name__ == "__main__":
-    token: str | None = login(email=BIWENGER_EMAIL, password=BIWENGER_PASSWORD)
-    if token:
-        competition_data: Dict | None = get_competition_data(token=token)
-        if competition_data:
-            with open(file="data/competition_data.json", mode="w", encoding="utf-8") as f:
-                json.dump(obj=competition_data, fp=f, indent=4, ensure_ascii=False)
-            print("Datos de la competición guardados en 'data/competition_data.json'.")
-        else:
-            print("Error en la obtención de datos de la competición.")
-    else:
-        print("Fallo en la autenticación, no se puede obtener datos.")
+    api: BiwengerAPI = BiwengerAPI(email=BIWENGER_EMAIL, password=BIWENGER_PASSWORD)
+    api.save_rounds_data(score=SOFASCORE)
