@@ -10,16 +10,13 @@ Este proyecto tiene como objetivo construir un agente inteligente para gestionar
 
 ## Estructura del Proyecto
 biwenger_project/
-├── biwenger_env/ # Entorno virtual de Python
 ├── src/ # Código fuente del proyecto
 │ ├── init.py
-│ ├── auth.py # Módulo de autenticación y manejo de tokens
-│ ├── api.py # Módulo para interactuar con la API interna de Biwenger
-│ ├── scraper.py # (Opcional) Módulo para scraping web con Selenium/BeautifulSoup
-│ └── utils.py # Funciones de utilidad y procesamiento de datos
+│ ├── config.py # Configuración y constantes
+│ ├── wrapper.py # Wrapper para la API de Biwenger
+│ └── api.py # API customizada del Biwenger
 ├── data/ # Datos extraídos (JSON, CSV, etc.)
-├── requirements.txt # Dependencias del proyecto
-└── README.md # Este archivo
+└── requirements.txt # Dependencias del proyecto
 
 ## Instalación
 1. **Clonar el repositorio:**
@@ -29,6 +26,7 @@ cd Biwenger
 ```
 
 2. **Crear y activar el entorno virtual:**
+
 En Linux/MacOS:
 ```bash
 python -m venv .venv
@@ -45,11 +43,23 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Uso
-- Configura tus credenciales y parámetros necesarios en el módulo auth.py.
-- Ejecuta los scripts para autenticarte y extraer datos, por ejemplo:
-```bash
-python src/auth.py
-python src/api.py
+4. **Configurar variables de entorno:**
+
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 ```
-- Revisa la carpeta data/ para ver la información extraída.
+BIWENGER_EMAIL=tu_email
+BIWENGER_PASSWORD=tu_password
+X-USER=tu_user_id
+X-LEAGUE=tu_league_id
+X-VERSION=version_api
+```
+
+## Uso
+1. Asegúrate de tener las variables de entorno configuradas correctamente.
+2. Ejecuta los scripts para extraer datos.
+3. Los datos extraídos se guardarán en la carpeta `data/` organizados por sistema de puntuación y temporada.
+
+## Sistemas de Puntuación
+- PICAS (1): Sistema de puntuación principal de Biwenger
+- SOFASCORE (2): Sistema basado en Sofascore
+- MEDIA (5): Sistema basado en la media de puntuaciones
