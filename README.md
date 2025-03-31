@@ -9,6 +9,7 @@ Este proyecto tiene como objetivo construir un agente inteligente para gestionar
 - Desarrollar un motor de recomendaciones que ayude a tomar decisiones de fichajes, ventas y alineaciones.
 
 ## Estructura del Proyecto
+```bash
 biwenger_project/
 ├── src/ # Código fuente del proyecto
 │ ├── init.py
@@ -17,6 +18,7 @@ biwenger_project/
 │ └── api.py # API customizada del Biwenger
 ├── data/ # Datos extraídos (JSON, CSV, etc.)
 └── requirements.txt # Dependencias del proyecto
+```
 
 ## Instalación
 1. **Clonar el repositorio:**
