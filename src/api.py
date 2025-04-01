@@ -142,4 +142,4 @@ class BiwengerAPI:
 
 if __name__ == "__main__":
     api: BiwengerAPI = BiwengerAPI(email=BIWENGER_EMAIL, password=BIWENGER_PASSWORD)
-    api.save_rounds_data(score=SOFASCORE)
+    api.save_rounds_data(score=MEDIA)

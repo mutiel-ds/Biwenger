@@ -1,0 +1,1005 @@
+{
+    "status": 200,
+    "data": {
+        "id": 4083,
+        "name": "Round 37",
+        "short": "R37",
+        "competition": {
+            "id": 1,
+            "slug": "la-liga",
+            "standings": [
+                {
+                    "name": "",
+                    "teams": [
+                        {
+                            "position": 1,
+                            "team": {
+                                "id": 3,
+                                "name": "Barcelona",
+                                "slug": "barcelona"
+                            },
+                            "points": 66,
+                            "won": 21,
+                            "lost": 5,
+                            "tied": 3,
+                            "scored": 82,
+                            "against": 28
+                        },
+                        {
+                            "position": 2,
+                            "team": {
+                                "id": 15,
+                                "name": "Real Madrid",
+                                "slug": "real-madrid"
+                            },
+                            "points": 63,
+                            "won": 19,
+                            "lost": 4,
+                            "tied": 6,
+                            "scored": 62,
+                            "against": 29
+                        },
+                        {
+                            "position": 3,
+                            "team": {
+                                "id": 2,
+                                "name": "Atlético",
+                                "slug": "atletico"
+                            },
+                            "points": 57,
+                            "won": 16,
+                            "lost": 4,
+                            "tied": 9,
+                            "scored": 47,
+                            "against": 23
+                        },
+                        {
+                            "position": 4,
+                            "team": {
+                                "id": 1,
+                                "name": "Athletic",
+                                "slug": "athletic"
+                            },
+                            "points": 53,
+                            "won": 14,
+                            "lost": 4,
+                            "tied": 11,
+                            "scored": 46,
+                            "against": 24
+                        },
+                        {
+                            "position": 5,
+                            "team": {
+                                "id": 19,
+                                "name": "Villarreal",
+                                "slug": "villarreal"
+                            },
+                            "points": 47,
+                            "won": 13,
+                            "lost": 7,
+                            "tied": 8,
+                            "scored": 51,
+                            "against": 39
+                        },
+                        {
+                            "position": 6,
+                            "team": {
+                                "id": 87,
+                                "name": "Betis",
+                                "slug": "betis"
+                            },
+                            "points": 47,
+                            "won": 13,
+                            "lost": 8,
+                            "tied": 8,
+                            "scored": 40,
+                            "against": 36
+                        },
+                        {
+                            "position": 7,
+                            "team": {
+                                "id": 5,
+                                "name": "Celta",
+                                "slug": "celta"
+                            },
+                            "points": 40,
+                            "won": 11,
+                            "lost": 11,
+                            "tied": 7,
+                            "scored": 42,
+                            "against": 42
+                        },
+                        {
+                            "position": 8,
+                            "team": {
+                                "id": 70,
+                                "name": "Rayo Vallecano",
+                                "slug": "rayo-vallecano"
+                            },
+                            "points": 40,
+                            "won": 10,
+                            "lost": 9,
+                            "tied": 10,
+                            "scored": 33,
+                            "against": 31
+                        },
+                        {
+                            "position": 9,
+                            "team": {
+                                "id": 465,
+                                "name": "Mallorca",
+                                "slug": "mallorca"
+                            },
+                            "points": 40,
+                            "won": 11,
+                            "lost": 11,
+                            "tied": 7,
+                            "scored": 28,
+                            "against": 35
+                        },
+                        {
+                            "position": 10,
+                            "team": {
+                                "id": 13,
+                                "name": "Real Sociedad",
+                                "slug": "real-sociedad"
+                            },
+                            "points": 38,
+                            "won": 11,
+                            "lost": 13,
+                            "tied": 5,
+                            "scored": 27,
+                            "against": 31
+                        },
+                        {
+                            "position": 11,
+                            "team": {
+                                "id": 17,
+                                "name": "Sevilla",
+                                "slug": "sevilla"
+                            },
+                            "points": 36,
+                            "won": 9,
+                            "lost": 11,
+                            "tied": 9,
+                            "scored": 33,
+                            "against": 39
+                        },
+                        {
+                            "position": 12,
+                            "team": {
+                                "id": 8,
+                                "name": "Getafe",
+                                "slug": "getafe"
+                            },
+                            "points": 36,
+                            "won": 9,
+                            "lost": 11,
+                            "tied": 9,
+                            "scored": 26,
+                            "against": 25
+                        },
+                        {
+                            "position": 13,
+                            "team": {
+                                "id": 289,
+                                "name": "Girona",
+                                "slug": "girona"
+                            },
+                            "points": 34,
+                            "won": 9,
+                            "lost": 13,
+                            "tied": 7,
+                            "scored": 37,
+                            "against": 45
+                        },
+                        {
+                            "position": 14,
+                            "team": {
+                                "id": 93,
+                                "name": "Osasuna",
+                                "slug": "osasuna"
+                            },
+                            "points": 34,
+                            "won": 7,
+                            "lost": 9,
+                            "tied": 13,
+                            "scored": 33,
+                            "against": 42
+                        },
+                        {
+                            "position": 15,
+                            "team": {
+                                "id": 18,
+                                "name": "Valencia",
+                                "slug": "valencia"
+                            },
+                            "points": 31,
+                            "won": 7,
+                            "lost": 12,
+                            "tied": 10,
+                            "scored": 32,
+                            "against": 46
+                        },
+                        {
+                            "position": 16,
+                            "team": {
+                                "id": 7,
+                                "name": "Espanyol",
+                                "slug": "espanyol"
+                            },
+                            "points": 29,
+                            "won": 7,
+                            "lost": 13,
+                            "tied": 8,
+                            "scored": 27,
+                            "against": 40
+                        },
+                        {
+                            "position": 17,
+                            "team": {
+                                "id": 91,
+                                "name": "Alavés",
+                                "slug": "alaves"
+                            },
+                            "points": 27,
+                            "won": 6,
+                            "lost": 14,
+                            "tied": 9,
+                            "scored": 32,
+                            "against": 44
+                        },
+                        {
+                            "position": 18,
+                            "team": {
+                                "id": 92,
+                                "name": "Leganés",
+                                "slug": "leganes"
+                            },
+                            "points": 27,
+                            "won": 6,
+                            "lost": 14,
+                            "tied": 9,
+                            "scored": 28,
+                            "against": 46
+                        },
+                        {
+                            "position": 19,
+                            "team": {
+                                "id": 89,
+                                "name": "Las Palmas",
+                                "slug": "las-palmas"
+                            },
+                            "points": 26,
+                            "won": 6,
+                            "lost": 15,
+                            "tied": 8,
+                            "scored": 33,
+                            "against": 48
+                        },
+                        {
+                            "position": 20,
+                            "team": {
+                                "id": 418,
+                                "name": "Real Valladolid",
+                                "slug": "real-valladolid"
+                            },
+                            "points": 16,
+                            "won": 4,
+                            "lost": 21,
+                            "tied": 4,
+                            "scored": 19,
+                            "against": 65
+                        }
+                    ]
+                }
+            ]
+        },
+        "status": "pending",
+        "scoreID": 1,
+        "games": [
+            {
+                "id": 41929,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 2,
+                    "name": "Atlético",
+                    "slug": "atletico",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 87,
+                    "name": "Betis",
+                    "slug": "betis",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Wanda Metropolitano"
+            },
+            {
+                "id": 41930,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 3,
+                    "name": "Barcelona",
+                    "slug": "barcelona",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 19,
+                    "name": "Villarreal",
+                    "slug": "villarreal",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Camp Nou"
+            },
+            {
+                "id": 41931,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 5,
+                    "name": "Celta",
+                    "slug": "celta",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 70,
+                    "name": "Rayo Vallecano",
+                    "slug": "rayo-vallecano",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Balaídos"
+            },
+            {
+                "id": 41932,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 18,
+                    "name": "Valencia",
+                    "slug": "valencia",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 1,
+                    "name": "Athletic",
+                    "slug": "athletic",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Mestalla"
+            },
+            {
+                "id": 41933,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 465,
+                    "name": "Mallorca",
+                    "slug": "mallorca",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 8,
+                    "name": "Getafe",
+                    "slug": "getafe",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": null
+            },
+            {
+                "id": 41934,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 13,
+                    "name": "Real Sociedad",
+                    "slug": "real-sociedad",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 289,
+                    "name": "Girona",
+                    "slug": "girona",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Anoeta"
+            },
+            {
+                "id": 41935,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 17,
+                    "name": "Sevilla",
+                    "slug": "sevilla",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 15,
+                    "name": "Real Madrid",
+                    "slug": "real-madrid",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Ramón Sánchez-Pizjuán"
+            },
+            {
+                "id": 41936,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 418,
+                    "name": "Real Valladolid",
+                    "slug": "real-valladolid",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 91,
+                    "name": "Alavés",
+                    "slug": "alaves",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "José Zorrilla"
+            },
+            {
+                "id": 41937,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 89,
+                    "name": "Las Palmas",
+                    "slug": "las-palmas",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 92,
+                    "name": "Leganés",
+                    "slug": "leganes",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": "Gran Canaria"
+            },
+            {
+                "id": 41938,
+                "date": 1747519200,
+                "status": "pending",
+                "home": {
+                    "id": 93,
+                    "name": "Osasuna",
+                    "slug": "osasuna",
+                    "score": null,
+                    "reports": []
+                },
+                "away": {
+                    "id": 7,
+                    "name": "Espanyol",
+                    "slug": "espanyol",
+                    "score": null,
+                    "reports": []
+                },
+                "preview": null,
+                "summary": null,
+                "location": null
+            }
+        ],
+        "season": {
+            "id": "2025",
+            "name": "2024/2025 season",
+            "slug": "2024-2025",
+            "rounds": [
+                {
+                    "id": 4047,
+                    "name": "Round 1",
+                    "short": "R1",
+                    "status": "finished"
+                },
+                {
+                    "id": 4048,
+                    "name": "Round 2",
+                    "short": "R2",
+                    "status": "finished"
+                },
+                {
+                    "id": 4049,
+                    "name": "Round 3",
+                    "short": "R3",
+                    "status": "finished"
+                },
+                {
+                    "id": 4050,
+                    "name": "Round 4",
+                    "short": "R4",
+                    "status": "finished"
+                },
+                {
+                    "id": 4051,
+                    "name": "Round 5",
+                    "short": "R5",
+                    "status": "finished"
+                },
+                {
+                    "id": 4053,
+                    "name": "Round 7",
+                    "short": "R7",
+                    "status": "finished"
+                },
+                {
+                    "id": 4334,
+                    "name": "Round 3 (postponed)",
+                    "short": "R3",
+                    "phase": 2,
+                    "status": "finished"
+                },
+                {
+                    "id": 4052,
+                    "name": "Round 6",
+                    "short": "R6",
+                    "status": "finished"
+                },
+                {
+                    "id": 4343,
+                    "name": "Round 7 (postponed)",
+                    "short": "R7",
+                    "phase": 2,
+                    "status": "finished"
+                },
+                {
+                    "id": 4054,
+                    "name": "Round 8",
+                    "short": "R8",
+                    "status": "finished"
+                },
+                {
+                    "id": 4055,
+                    "name": "Round 9",
+                    "short": "R9",
+                    "status": "finished"
+                },
+                {
+                    "id": 4056,
+                    "name": "Round 10",
+                    "short": "R10",
+                    "status": "finished"
+                },
+                {
+                    "id": 4057,
+                    "name": "Round 11",
+                    "short": "R11",
+                    "status": "finished"
+                },
+                {
+                    "id": 4058,
+                    "name": "Round 12",
+                    "short": "R12",
+                    "status": "finished"
+                },
+                {
+                    "id": 4059,
+                    "name": "Round 13",
+                    "short": "R13",
+                    "status": "finished"
+                },
+                {
+                    "id": 4060,
+                    "name": "Round 14",
+                    "short": "R14",
+                    "status": "finished"
+                },
+                {
+                    "id": 4061,
+                    "name": "Round 15",
+                    "short": "R15",
+                    "status": "finished"
+                },
+                {
+                    "id": 4065,
+                    "name": "Round 19",
+                    "short": "R19",
+                    "status": "finished"
+                },
+                {
+                    "id": 4062,
+                    "name": "Round 16",
+                    "short": "R16",
+                    "status": "finished"
+                },
+                {
+                    "id": 4063,
+                    "name": "Round 17",
+                    "short": "R17",
+                    "status": "finished"
+                },
+                {
+                    "id": 4348,
+                    "name": "Round 12 (postponed)",
+                    "short": "R12",
+                    "phase": 2,
+                    "status": "finished"
+                },
+                {
+                    "id": 4352,
+                    "name": "Round 13 (postponed)",
+                    "short": "R13",
+                    "phase": 2,
+                    "status": "finished"
+                },
+                {
+                    "id": 4064,
+                    "name": "Round 18",
+                    "short": "R18",
+                    "status": "finished"
+                },
+                {
+                    "id": 4350,
+                    "name": "Round 12 (postponed)",
+                    "short": "R12",
+                    "phase": 3,
+                    "status": "finished"
+                },
+                {
+                    "id": 4346,
+                    "name": "Round 19 (postponed)",
+                    "short": "R19",
+                    "phase": 2,
+                    "status": "finished"
+                },
+                {
+                    "id": 4066,
+                    "name": "Round 20",
+                    "short": "R20",
+                    "status": "finished"
+                },
+                {
+                    "id": 4067,
+                    "name": "Round 21",
+                    "short": "R21",
+                    "status": "finished"
+                },
+                {
+                    "id": 4068,
+                    "name": "Round 22",
+                    "short": "R22",
+                    "status": "finished"
+                },
+                {
+                    "id": 4069,
+                    "name": "Round 23",
+                    "short": "R23",
+                    "status": "finished"
+                },
+                {
+                    "id": 4070,
+                    "name": "Round 24",
+                    "short": "R24",
+                    "status": "finished"
+                },
+                {
+                    "id": 4071,
+                    "name": "Round 25",
+                    "short": "R25",
+                    "status": "finished"
+                },
+                {
+                    "id": 4072,
+                    "name": "Round 26",
+                    "short": "R26",
+                    "status": "finished"
+                },
+                {
+                    "id": 4073,
+                    "name": "Round 27",
+                    "short": "R27",
+                    "status": "finished"
+                },
+                {
+                    "id": 4074,
+                    "name": "Round 28",
+                    "short": "R28",
+                    "status": "finished"
+                },
+                {
+                    "id": 4424,
+                    "name": "Round 27 (postponed)",
+                    "short": "R27",
+                    "phase": 2,
+                    "status": "finished"
+                },
+                {
+                    "id": 4075,
+                    "name": "Round 29",
+                    "short": "R29",
+                    "status": "active"
+                },
+                {
+                    "id": 4076,
+                    "name": "Round 30",
+                    "short": "R30",
+                    "status": "pending"
+                },
+                {
+                    "id": 4077,
+                    "name": "Round 31",
+                    "short": "R31",
+                    "status": "pending"
+                },
+                {
+                    "id": 4078,
+                    "name": "Round 32",
+                    "short": "R32",
+                    "status": "pending"
+                },
+                {
+                    "id": 4079,
+                    "name": "Round 33",
+                    "short": "R33",
+                    "status": "pending"
+                },
+                {
+                    "id": 4423,
+                    "name": "Round 26 (postponed)",
+                    "short": "R26",
+                    "phase": 2,
+                    "status": "pending"
+                },
+                {
+                    "id": 4080,
+                    "name": "Round 34",
+                    "short": "R34",
+                    "status": "pending"
+                },
+                {
+                    "id": 4081,
+                    "name": "Round 35",
+                    "short": "R35",
+                    "status": "pending"
+                },
+                {
+                    "id": 4082,
+                    "name": "Round 36",
+                    "short": "R36",
+                    "status": "pending"
+                },
+                {
+                    "id": 4083,
+                    "name": "Round 37",
+                    "short": "R37",
+                    "status": "pending"
+                },
+                {
+                    "id": 4084,
+                    "name": "Round 38",
+                    "short": "R38",
+                    "status": "pending"
+                }
+            ]
+        },
+        "next": {
+            "id": 4084,
+            "name": "Round 38",
+            "games": [
+                {
+                    "id": 41939,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 1,
+                        "name": "Athletic",
+                        "slug": "athletic",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 3,
+                        "name": "Barcelona",
+                        "slug": "barcelona",
+                        "score": null
+                    },
+                    "location": "San Mamés"
+                },
+                {
+                    "id": 41940,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 87,
+                        "name": "Betis",
+                        "slug": "betis",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 18,
+                        "name": "Valencia",
+                        "slug": "valencia",
+                        "score": null
+                    },
+                    "location": "Benito Villamarín"
+                },
+                {
+                    "id": 41941,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 19,
+                        "name": "Villarreal",
+                        "slug": "villarreal",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 17,
+                        "name": "Sevilla",
+                        "slug": "sevilla",
+                        "score": null
+                    },
+                    "location": "Estadio de la Cerámica"
+                },
+                {
+                    "id": 41942,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 15,
+                        "name": "Real Madrid",
+                        "slug": "real-madrid",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 13,
+                        "name": "Real Sociedad",
+                        "slug": "real-sociedad",
+                        "score": null
+                    },
+                    "location": "Santiago Bernabéu"
+                },
+                {
+                    "id": 41943,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 70,
+                        "name": "Rayo Vallecano",
+                        "slug": "rayo-vallecano",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 465,
+                        "name": "Mallorca",
+                        "slug": "mallorca",
+                        "score": null
+                    },
+                    "location": "Campo de Fútbol de Vallecas"
+                },
+                {
+                    "id": 41944,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 91,
+                        "name": "Alavés",
+                        "slug": "alaves",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 93,
+                        "name": "Osasuna",
+                        "slug": "osasuna",
+                        "score": null
+                    },
+                    "location": "Mendizorroza"
+                },
+                {
+                    "id": 41945,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 8,
+                        "name": "Getafe",
+                        "slug": "getafe",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 5,
+                        "name": "Celta",
+                        "slug": "celta",
+                        "score": null
+                    },
+                    "location": "Coliseum Alfonso Pérez"
+                },
+                {
+                    "id": 41946,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 92,
+                        "name": "Leganés",
+                        "slug": "leganes",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 418,
+                        "name": "Real Valladolid",
+                        "slug": "real-valladolid",
+                        "score": null
+                    },
+                    "location": "Estadio Municipal de Butarque"
+                },
+                {
+                    "id": 41947,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 289,
+                        "name": "Girona",
+                        "slug": "girona",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 2,
+                        "name": "Atlético",
+                        "slug": "atletico",
+                        "score": null
+                    },
+                    "location": "Montilivi"
+                },
+                {
+                    "id": 41948,
+                    "date": 1748124000,
+                    "status": "pending",
+                    "home": {
+                        "id": 7,
+                        "name": "Espanyol",
+                        "slug": "espanyol",
+                        "score": null
+                    },
+                    "away": {
+                        "id": 89,
+                        "name": "Las Palmas",
+                        "slug": "las-palmas",
+                        "score": null
+                    },
+                    "location": "RCDE Stadium"
+                }
+            ]
+        },
+        "news": [],
+        "sponsor": {
+            "url": "https://www.orange.es/orange-tv/futbol",
+            "logo": "https://cdn.biwenger.com/cdn-cgi/image/f=avif/campaigns/2024/football/orange-24-25/round-banner-v2.jpg"
+        }
+    }
+}
