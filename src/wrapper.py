@@ -3,9 +3,8 @@ from typing import Dict, Optional
 import requests
 from requests import Response
 
-from config import PICAS, SOFASCORE, MEDIA
-from config import USER_AGENT, X_USER, X_LEAGUE, X_VERSION
-from config import LOGIN_URL, SEASON_DATA_URL, ROUND_DATA_URL 
+from config import Headers
+from config import APIUrls 
 
 import time
 import logging
@@ -29,7 +28,7 @@ class Wrapper:
             str: Token de autenticación.
         """
         headers: Dict[str, str] = {
-            "User-Agent": USER_AGENT,
+            "User-Agent": Headers.USER_AGENT.value,
         }
         payload: Dict[str, str] = {
             "email": self.email,
@@ -37,7 +36,7 @@ class Wrapper:
         }
         
         try:
-            response: Response = requests.post(url=LOGIN_URL, json=payload, headers=headers, timeout=10)
+            response: Response = requests.post(url=APIUrls.LOGIN_URL.value, json=payload, headers=headers, timeout=10)
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             logging.error(msg=f"Error iniciando sesión: {e}")
@@ -64,10 +63,17 @@ class Wrapper:
             Dict: Diccionario con el User-Agent.
         """
         return {
-            "User-Agent": USER_AGENT
+            "User-Agent": Headers.USER_AGENT.value
         }
     
-    def get_user_headers(self, token: str, user_agent: str = USER_AGENT, x_user: str = X_USER, x_league: str = X_LEAGUE, x_version: str = X_VERSION) -> Dict:
+    def get_user_headers(
+            self,
+            token: str,
+            user_agent: str = Headers.USER_AGENT.value,
+            x_user: str = Headers.X_USER.value,
+            x_league: str = Headers.X_LEAGUE.value,
+            x_version: str = Headers.X_VERSION.value
+        ) -> Dict:
         """
         Devuelve un diccionario con los headers necesarios para realizar peticiones a la API de Biwenger.
 
@@ -86,7 +92,7 @@ class Wrapper:
             "X-Version": x_version
         }
     
-class Extractor(Wrapper):
+class GameDataExtractor(Wrapper):
     def _make_request_with_retry(self, url: str, headers: Dict, max_retries: int = 5) -> Dict:
         """
         Makes a request with retry logic for rate limiting.
@@ -111,7 +117,7 @@ class Extractor(Wrapper):
             
         raise Exception(f"Failed after {max_retries} attempts: {data.get('userMessage', 'Unknown error')}")
 
-    def get_season_data(self, year: int, score: int) -> Dict:
+    def get_season_data(self, year: int) -> Dict:
         """
         Obtiene los datos de la temporada especificada.
         
@@ -120,7 +126,10 @@ class Extractor(Wrapper):
             score (int): Sistema de puntuación a utilizar.
         """
         header: Dict = self.get_user_agent_header()
-        url: str = SEASON_DATA_URL.format(year=year, score=score)
+        if year:
+            url: str = APIUrls.SEASON_DATA_URL.value.format(year=year)
+        else:
+            url: str = APIUrls.SEASON_DATA_URL.value.split(sep="/{year}")[0]
         return self._make_request_with_retry(url=url, headers=header)
     
     def get_round_data(self, round: Optional[int]) -> Dict:
@@ -129,10 +138,23 @@ class Extractor(Wrapper):
 
         Args:
             round (int, Opcional): Número de la jornada. Selecciona la jornada actual si no se especifica.
+            score (int): Sistema de puntuación a utilizar.
         """
         header: Dict = self.get_user_agent_header()
         if round:
-            url: str = ROUND_DATA_URL.format(round=round)
+            url: str = APIUrls.ROUND_DATA_URL.value.format(round=round)
         else:
-            url: str = ROUND_DATA_URL.split(sep="/{round}")[0]
+            url: str = APIUrls.ROUND_DATA_URL.value.split(sep="/{round}")[0]
+        return self._make_request_with_retry(url=url, headers=header)
+    
+    def get_game_data(self, game: int, score: int) -> Dict:
+        """
+        Obtiene los datos del partido especificado.
+
+        Args:
+            game (int): ID del partido.
+            score (int): Sistema de puntuación a utilizar.
+        """
+        header: Dict = self.get_user_agent_header()
+        url: str = APIUrls.GAME_DATA_URL.value.format(game=game, score=score)
         return self._make_request_with_retry(url=url, headers=header)
