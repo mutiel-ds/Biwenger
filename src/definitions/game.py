@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 
-from definitions.status import Status
+from .status import Status
 
-class Match(BaseModel):
-    match_id: int # ID del partido
+class Game(BaseModel):
+    game_id: int # ID del partido
     round_id: int # ID de la jornada
     home_team_id: int # ID del equipo local
     away_team_id: int # ID del equipo visitante

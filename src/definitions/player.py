@@ -3,8 +3,6 @@ from typing import Dict
 from uuid import uuid4, UUID
 from pydantic import BaseModel
 
-from definitions.event import Event
-
 class PlayerPosition(Enum):
     DESCONOCIDA = 0
     PORTERO = 1
@@ -57,6 +55,6 @@ class Player(BaseModel):
 class PlayerPerformance(BaseModel):
     player_performance_id: UUID = uuid4() # ID único de la actuación del jugador (automáticamente generado)
     player_id: int # ID del jugador
-    match_id: int # ID del partido
+    game_id: int # ID del partido
     team_id: int # ID del equipo
     points: int # Puntos obtenidos por el jugador en el partido
