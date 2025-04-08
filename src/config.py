@@ -2,13 +2,27 @@ import os
 from dotenv import load_dotenv
 
 from enum import Enum
+from typing import Dict
 
 load_dotenv()
 
 # Credenciales y configuración
-class Credentials(Enum):
+class MyCredential(Enum):
     BIWENGER_EMAIL = os.environ["BIWENGER_EMAIL"]
     BIWENGER_PASSWORD = os.environ["BIWENGER_PASSWORD"]
+
+class Credentials:
+    email: str
+    password: str
+
+    def __init__(
+        self,
+        email: str = MyCredential.BIWENGER_EMAIL.value,
+        password: str = MyCredential.BIWENGER_PASSWORD.value
+    ) -> None:
+        self.email = email
+        self.password = password
+        
 
 ## Headers a usar en las peticiones de usuario
 class Headers(Enum):
@@ -36,3 +50,31 @@ class ScoringSystem(Enum):
     PICAS = 1
     SOFASCORE = 2
     MEDIA = 5
+
+    @classmethod
+    def from_value(cls, value: int) -> "ScoringSystem":
+        """
+        Devuelve un objeto ScoringSystem a partir de su valor.
+        """
+        for scoring_system in cls:
+            if scoring_system.value == value:
+                return scoring_system
+        raise ValueError("Valor de sistema de puntuación no soportado.")
+    
+    def get_value(self) -> int:
+        """
+        Devuelve el valor de un objeto ScoringSystem.
+        """
+        return self.value
+    
+    def get_scoring_system(self) -> str:
+        """
+        Devuelve la descripción de un objeto ScoringSystem.
+        """
+        descriptions: Dict[ScoringSystem, str] = {
+            ScoringSystem.PICAS: "Picas",
+            ScoringSystem.SOFASCORE: "SofaScore",
+            ScoringSystem.MEDIA: "Media"
+        }
+
+        return descriptions.get(self, "Sistema de puntuación desconocido")
