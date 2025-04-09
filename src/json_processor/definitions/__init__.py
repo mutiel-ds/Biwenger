@@ -1,10 +1,10 @@
-from .event import Event
-from .player import Player, PlayerPerformance
-from .team import Team
-from .game import Game
-from .status import Status
-from .season import Season
-from .round import Round
+from src.json_processor.definitions.event import Event
+from src.json_processor.definitions.player import Player, PlayerPerformance
+from src.json_processor.definitions.team import Team
+from src.json_processor.definitions.game import Game
+from src.json_processor.definitions.status import Status
+from src.json_processor.definitions.season import Season
+from src.json_processor.definitions.round import Round
 
 __all__ = [
     "Event",

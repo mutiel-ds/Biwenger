@@ -1,24 +1,17 @@
-from .utils import wait
+from src.utils import wait
 
-from .scraper.config import (
+from src.scraper import (
     MyCredential,
     Credentials,
     Headers,
     APIUrls,
     ScoringSystem
 )
-from .scraper.scraper import BiwengerScraper
-from .scraper.wrapper import GameDataExtractor
+from src.scraper import BiwengerScraper
+from src.scraper import GameDataExtractor
 
-from .db_processor.connection import DatabaseConnection
-from .db_processor.config import (
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    DB_CONFIG
-)
-
-from .json_processor.processor import BiwengerJSONProcessor
-from .json_processor.definitions import (
+from src.json_processor import BiwengerJSONProcessor
+from src.json_processor import (
     Event,
     Player,
     PlayerPerformance,
@@ -28,6 +21,13 @@ from .json_processor.definitions import (
     Season,
     Round
 )
+
+from src.db_processor import (
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    DB_CONFIG
+)
+from src.db_processor import DatabaseConnection
 
 __all__ = [
     # utils

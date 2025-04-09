@@ -4,11 +4,14 @@ from uuid import uuid4, UUID
 from pydantic import ValidationError
 from typing import List, Dict, Optional, Tuple
 
-from src import Credentials, ScoringSystem, BiwengerScraper
-from src import Season, Round, Game, PlayerPerformance, Event, Player
+from src.scraper.config import Credentials, ScoringSystem
+from src.scraper.scraper import BiwengerScraper
+from src.json_processor.definitions import Season, Round, Game, PlayerPerformance, Event, Player
 
 class BiwengerJSONProcessor:
     score: int
+    scoring_folder: str
+    scraper: BiwengerScraper
 
     def __init__(self, score: int = 1) -> None:
         self.score = score

@@ -3,8 +3,8 @@ from typing import Dict, Optional
 import requests
 from requests import Response
 
-from src import Headers
-from src import APIUrls 
+from src.scraper.config import Headers
+from src.scraper.config import APIUrls 
 
 import time
 import logging

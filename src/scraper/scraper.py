@@ -4,9 +4,9 @@ import logging
 from datetime import datetime
 from typing import Dict, Optional
 
-from ..utils import wait
-from .wrapper import GameDataExtractor
-from .config import ScoringSystem, Credentials
+from src.utils import wait
+from src.scraper.wrapper import GameDataExtractor
+from src.scraper.config import ScoringSystem, Credentials
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 

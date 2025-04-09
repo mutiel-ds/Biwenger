@@ -4,7 +4,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from supabase import create_client, Client
 
-from src import SUPABASE_URL, SUPABASE_KEY, DB_CONFIG
+from src.db_processor.config import SUPABASE_URL, SUPABASE_KEY, DB_CONFIG
 
 class DatabaseConnection:
     _instance: Optional['DatabaseConnection'] = None
@@ -13,7 +13,7 @@ class DatabaseConnection:
 
     def __new__(cls) -> "DatabaseConnection":
         if cls._instance is None:
-            cls._instance = super(DatabaseConnection, cls).__new__(cls=cls)
+            cls._instance = super(DatabaseConnection, cls).__new__(cls)
         return cls._instance
 
     def __init__(self) -> None:
