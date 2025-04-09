@@ -75,6 +75,30 @@ class Event(BaseModel):
         self._event_type = EventType.from_value(value=self.event_type)
         self._event_description = self._event_type.get_description()
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "Event":
+        """
+        Crea un objeto Event a partir de un diccionario.
+        """
+        if "event_id" in data and isinstance(data["event_id"], str):
+            data["event_id"] = UUID(hex=data["event_id"])
+        if "player_performance_id" in data and isinstance(data["player_performance_id"], str):
+            data["player_performance_id"] = UUID(hex=data["player_performance_id"])
+        return cls(**data)
+
+    def to_dict(self) -> dict:
+        """
+        Convierte el objeto Event a un diccionario.
+        """
+        return {
+            "event_id": str(object=self.event_id),
+            "player_performance_id": str(object=self.player_performance_id),
+            "event_type": self.event_type,
+            "event_minute": self.event_minute,
+            "_event_description": self._event_description,
+            "_event_type": self._event_type.value
+        }
+
     def __str__(self) -> str:
         """
         Devuelve una representación en string del evento.

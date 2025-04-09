@@ -1,3 +1,4 @@
+from typing import Dict
 from pydantic import BaseModel
 
 from src.json_processor.definitions.status import Status
@@ -11,6 +12,24 @@ class Season(BaseModel):
     def __init__(self, **data) -> None:
         super().__init__(**data)
         self._status = Status.from_value(value=self.season_status)
+
+    @classmethod
+    def from_dict(cls, data: Dict) -> "Season":
+        """
+        Crea un objeto Season a partir de un diccionario.
+        """
+        return cls(**data)
+
+    def to_dict(self) -> Dict:
+        """
+        Convierte el objeto Season a un diccionario.
+        """
+        return {
+            "season_id": self.season_id,
+            "season_name": self.season_name,
+            "season_status": self._status.value,
+            #"_status": self._status.value
+        }
 
     def __str__(self) -> str:
         """

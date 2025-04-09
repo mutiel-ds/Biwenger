@@ -8,6 +8,7 @@ load_dotenv()
 
 # Database configuration
 SUPABASE_URL: str = os.environ["SUPABASE_URL"]
+SUPABASE_SERVICE_KEY: str = os.environ["SUPABASE_SERVICE_KEY"]
 SUPABASE_KEY: str = os.environ["SUPABASE_KEY"]
 
 # Database connection settings

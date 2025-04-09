@@ -52,6 +52,25 @@ class Player(BaseModel):
         self._player_position = PlayerPosition.from_value(value=self.player_position)
         self._player_position_name = self._player_position.get_position()
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "Player":
+        """
+        Crea un objeto Player a partir de un diccionario.
+        """
+        return cls(**data)
+
+    def to_dict(self) -> dict:
+        """
+        Convierte el objeto Player a un diccionario.
+        """
+        return {
+            "player_id": self.player_id,
+            "player_name": self.player_name,
+            "player_position": self.player_position,
+            "_player_position": self._player_position.value,
+            "_player_position_name": self._player_position_name
+        }
+
     def __str__(self) -> str:
         """
         Devuelve una representación en string del jugador.
@@ -64,6 +83,27 @@ class PlayerPerformance(BaseModel):
     game_id: int # ID del partido
     team_id: int # ID del equipo
     points: int | None # Puntos obtenidos por el jugador en el partido
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "PlayerPerformance":
+        """
+        Crea un objeto PlayerPerformance a partir de un diccionario.
+        """
+        if "player_performance_id" in data and isinstance(data["player_performance_id"], str):
+            data["player_performance_id"] = UUID(data["player_performance_id"])
+        return cls(**data)
+
+    def to_dict(self) -> dict:
+        """
+        Convierte el objeto PlayerPerformance a un diccionario.
+        """
+        return {
+            "player_performance_id": str(self.player_performance_id),
+            "player_id": self.player_id,
+            "game_id": self.game_id,
+            "team_id": self.team_id,
+            "points": self.points
+        }
 
     def __str__(self) -> str:
         """

@@ -18,6 +18,29 @@ class Game(BaseModel):
         super().__init__(**data)
         self._status = Status.from_value(value=self.status)
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "Game":
+        """
+        Crea un objeto Game a partir de un diccionario.
+        """
+        return cls(**data)
+
+    def to_dict(self) -> dict:
+        """
+        Convierte el objeto Game a un diccionario.
+        """
+        return {
+            "game_id": self.game_id,
+            "round_id": self.round_id,
+            "home_team_id": self.home_team_id,
+            "away_team_id": self.away_team_id,
+            "date": self.date,
+            "status": self.status,
+            "_status": self._status.value,
+            "home_team_score": self.home_team_score,
+            "away_team_score": self.away_team_score
+        }
+
     def __str__(self) -> str:
         """
         Devuelve una representación en string del partido.

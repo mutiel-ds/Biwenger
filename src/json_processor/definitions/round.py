@@ -13,6 +13,25 @@ class Round(BaseModel):
         super().__init__(**data)
         self._status = Status.from_value(value=self.status)
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "Round":
+        """
+        Crea un objeto Round a partir de un diccionario.
+        """
+        return cls(**data)
+
+    def to_dict(self) -> dict:
+        """
+        Convierte el objeto Round a un diccionario.
+        """
+        return {
+            "round_id": self.round_id,
+            "season_id": self.season_id,
+            "name": self.name,
+            "status": self.status,
+            "_status": self._status.value
+        }
+
     def __str__(self) -> str:
         """
         Devuelve una representación en string de la jornada.
