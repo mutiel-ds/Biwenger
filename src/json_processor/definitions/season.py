@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from .status import Status
+from src import Status
 
 class Season(BaseModel):
     season_id: int # ID de la temporada

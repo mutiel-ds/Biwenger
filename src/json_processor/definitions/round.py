@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from .status import Status
+from src import Status
 
 class Round(BaseModel):
     round_id: int # ID de la jornada

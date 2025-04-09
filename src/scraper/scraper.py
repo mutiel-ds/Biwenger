@@ -1,14 +1,12 @@
 import os
-import time
 import json
 import logging
 from datetime import datetime
 from typing import Dict, Optional
 
-from utils import wait
-from wrapper import GameDataExtractor
-
-from config import ScoringSystem, Credentials
+from ..utils import wait
+from .wrapper import GameDataExtractor
+from .config import ScoringSystem, Credentials
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -200,7 +198,7 @@ class BiwengerScraper:
 
 if __name__ == "__main__":
     my_credentials: Credentials = Credentials()
-    scoring_system: ScoringSystem = ScoringSystem.MEDIA
+    scoring_system: ScoringSystem = ScoringSystem.SOFASCORE
     
     scraper: BiwengerScraper = BiwengerScraper(credentials=my_credentials)
     

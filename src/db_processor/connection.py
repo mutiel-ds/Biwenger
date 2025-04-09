@@ -4,7 +4,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from supabase import create_client, Client
 
-from .config import SUPABASE_URL, SUPABASE_KEY, DB_CONFIG
+from src import SUPABASE_URL, SUPABASE_KEY, DB_CONFIG
 
 class DatabaseConnection:
     _instance: Optional['DatabaseConnection'] = None
@@ -13,14 +13,14 @@ class DatabaseConnection:
 
     def __new__(cls) -> "DatabaseConnection":
         if cls._instance is None:
-            cls._instance = super(DatabaseConnection, cls).__new__(cls)
+            cls._instance = super(DatabaseConnection, cls).__new__(cls=cls)
         return cls._instance
 
     def __init__(self) -> None:
         if not self._supabase:
             if not SUPABASE_URL or not SUPABASE_KEY:
                 raise ValueError("Supabase URL and Key must be provided in environment variables")
-            self._supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+            self._supabase = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_KEY)
         
         if not self._pg_conn:
             if not all(DB_CONFIG.values()):

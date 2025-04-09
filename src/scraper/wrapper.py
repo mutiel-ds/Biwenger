@@ -3,8 +3,8 @@ from typing import Dict, Optional
 import requests
 from requests import Response
 
-from config import Headers
-from config import APIUrls 
+from src import Headers
+from src import APIUrls 
 
 import time
 import logging

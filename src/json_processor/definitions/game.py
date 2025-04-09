@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-from .status import Status
+from src import Status
 
 class Game(BaseModel):
     game_id: int # ID del partido

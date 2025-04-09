@@ -4,11 +4,10 @@ from uuid import uuid4, UUID
 from pydantic import ValidationError
 from typing import List, Dict, Optional, Tuple
 
-from definitions import *
-from config import ScoringSystem, Credentials
-from scraper import BiwengerScraper
+from src import Credentials, ScoringSystem, BiwengerScraper
+from src import Season, Round, Game, PlayerPerformance, Event, Player
 
-class BiwengerProcessor:
+class BiwengerJSONProcessor:
     score: int
 
     def __init__(self, score: int = 1) -> None:
@@ -607,7 +606,7 @@ class BiwengerProcessor:
         return players
 
 if __name__ == "__main__":
-    processor = BiwengerProcessor()
+    processor: BiwengerJSONProcessor = BiwengerJSONProcessor()
     
     for season in processor.get_seasons():
         print(season) 
