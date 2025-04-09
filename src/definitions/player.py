@@ -52,9 +52,21 @@ class Player(BaseModel):
         self._player_position = PlayerPosition.from_value(value=self.player_position)
         self._player_position_name = self._player_position.get_position()
 
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en string del jugador.
+        """
+        return f"{'-' * 30}\nJugador: {self.player_name}\nID: {self.player_id}\nPosición: {self._player_position_name}\n{'-' * 30}"
+
 class PlayerPerformance(BaseModel):
     player_performance_id: UUID = uuid4() # ID único de la actuación del jugador (automáticamente generado)
     player_id: int # ID del jugador
     game_id: int # ID del partido
     team_id: int # ID del equipo
-    points: int # Puntos obtenidos por el jugador en el partido
+    points: int | None # Puntos obtenidos por el jugador en el partido
+
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en string de la actuación del jugador.
+        """
+        return f"{'-' * 30}\nActuación del Jugador\nID de actuación: {self.player_performance_id}\nID del jugador: {self.player_id}\nID del partido: {self.game_id}\nID del equipo: {self.team_id}\nPuntos: {self.points if self.points is not None else 'No disponible'}\n{'-' * 30}"

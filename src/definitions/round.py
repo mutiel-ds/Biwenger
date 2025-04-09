@@ -12,3 +12,9 @@ class Round(BaseModel):
     def __init__(self, **data) -> None:
         super().__init__(**data)
         self._status = Status.from_value(value=self.status)
+
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en string de la jornada.
+        """
+        return f"{'-' * 30}\nJornada\nID: {self.round_id}\nTemporada ID: {self.season_id}\nNombre: {self.name}\nEstado: {self._status.get_value()}\n{'-' * 30}"

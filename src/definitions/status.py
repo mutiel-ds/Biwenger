@@ -23,3 +23,8 @@ class Status(Enum):
         """
         return self.value
 
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en string del estado.
+        """
+        return f"{'-' * 30}\nEstado: {self.get_value()}"

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 from .status import Status
@@ -16,3 +17,9 @@ class Game(BaseModel):
     def __init__(self, **data) -> None:
         super().__init__(**data)
         self._status = Status.from_value(value=self.status)
+
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en string del partido.
+        """
+        return f"{'-' * 30}\nPartido\nID del partido: {self.game_id}\nJornada: {self.round_id}\nEquipo Local (ID: {self.home_team_id}) {self.home_team_score} - {self.away_team_score} Equipo Visitante (ID: {self.away_team_id})\nFecha: {datetime.fromtimestamp(timestamp=self.date).strftime(format='%d/%m/%Y %H:%M')}\nEstado: {self._status.get_value()}\n{'-' * 30}"
