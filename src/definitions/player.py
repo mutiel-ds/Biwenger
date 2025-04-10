@@ -82,7 +82,6 @@ class PlayerPerformance(BaseModel):
     player_id: int # ID del jugador
     game_id: int # ID del partido
     team_id: int # ID del equipo
-    points: int | None # Puntos obtenidos por el jugador en el partido
 
     @classmethod
     def from_dict(cls, data: dict) -> "PlayerPerformance":
@@ -90,7 +89,7 @@ class PlayerPerformance(BaseModel):
         Crea un objeto PlayerPerformance a partir de un diccionario.
         """
         if "player_performance_id" in data and isinstance(data["player_performance_id"], str):
-            data["player_performance_id"] = UUID(data["player_performance_id"])
+            data["player_performance_id"] = UUID(hex=data["player_performance_id"])
         return cls(**data)
 
     def to_dict(self) -> dict:
@@ -98,15 +97,14 @@ class PlayerPerformance(BaseModel):
         Convierte el objeto PlayerPerformance a un diccionario.
         """
         return {
-            "player_performance_id": str(self.player_performance_id),
+            "player_performance_id": str(object=self.player_performance_id),
             "player_id": self.player_id,
             "game_id": self.game_id,
-            "team_id": self.team_id,
-            "points": self.points
+            "team_id": self.team_id
         }
 
     def __str__(self) -> str:
         """
         Devuelve una representación en string de la actuación del jugador.
         """
-        return f"{'-' * 30}\nActuación del Jugador\nID de actuación: {self.player_performance_id}\nID del jugador: {self.player_id}\nID del partido: {self.game_id}\nID del equipo: {self.team_id}\nPuntos: {self.points if self.points is not None else 'No disponible'}\n{'-' * 30}"
+        return f"{'-' * 30}\nActuación del Jugador\nID de actuación: {self.player_performance_id}\nID del jugador: {self.player_id}\nID del partido: {self.game_id}\nID del equipo: {self.team_id}\n{'-' * 30}"

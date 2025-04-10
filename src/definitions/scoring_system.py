@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel
 
 class ScoringSystemType(Enum):
+    DESCONOCIDO = 0
     PICAS = 1
     SOFASCORE = 2
     MEDIA = 5
@@ -29,6 +30,7 @@ class ScoringSystemType(Enum):
         Devuelve la descripción de un objeto ScoringSystemType.
         """
         descriptions: Dict[ScoringSystemType, str] = {
+            ScoringSystemType.DESCONOCIDO: "Sistema de puntuación desconocido",
             ScoringSystemType.PICAS: "Picas",
             ScoringSystemType.SOFASCORE: "SofaScore",
             ScoringSystemType.MEDIA: "Media"
@@ -39,6 +41,11 @@ class ScoringSystemType(Enum):
 class ScoringSystem(BaseModel):
     scoring_system_id: int # ID del sistema de puntuación
     scoring_system_name: str # Nombre del sistema de puntuación
+    scoring_system_type: ScoringSystemType  = ScoringSystemType.DESCONOCIDO # Tipo de sistema de puntuación
+
+    def __init__(self, **data) -> None:
+        super().__init__(**data)
+        self.scoring_system_type = ScoringSystemType.from_value(value=self.scoring_system_id)
 
 class PerformanceScore(BaseModel):
     score_id: UUID = uuid4() # ID de la puntuacion

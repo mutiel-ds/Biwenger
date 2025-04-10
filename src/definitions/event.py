@@ -11,7 +11,7 @@ class EventType(Enum):
     SUSTITUCION = 4
     ENTRADA_BANQUILLO = 5
     TARJETA_AMARILLA = 6
-    TAREJETA_ROJA = 7
+    TARJETA_ROJA = 7
     DOBLE_TARJETA_AMARILLA = 8
     AUTOGOL = 9
     DISPARO_AL_PALO = 10
@@ -49,7 +49,7 @@ class EventType(Enum):
             EventType.SUSTITUCION: "Sustitución",
             EventType.ENTRADA_BANQUILLO: "Entrada desde el banquillo",
             EventType.TARJETA_AMARILLA: "Tarjeta amarilla",
-            EventType.TAREJETA_ROJA: "Tarjeta roja",
+            EventType.TARJETA_ROJA: "Tarjeta roja",
             EventType.DOBLE_TARJETA_AMARILLA: "Doble tarjeta amarilla",
             EventType.AUTOGOL: "Autogol",
             EventType.DISPARO_AL_PALO: "Disparo al palo",

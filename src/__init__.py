@@ -8,8 +8,8 @@ from src.config import (
 )
 from src.config import (
     SUPABASE_URL,
-    SUPABASE_KEY,
-    SUPABASE_SERVICE_KEY,
+    SUPABASE_SECRET_KEY,
+    SUPABASE_PUBLIC_KEY,
     DB_CONFIG
 )
 
@@ -55,8 +55,8 @@ __all__ = [
     
     # db_processor.config
     'SUPABASE_URL',
-    'SUPABASE_KEY',
-    'SUPABASE_SERVICE_KEY',
+    'SUPABASE_SECRET_KEY',
+    'SUPABASE_PUBLIC_KEY',
     'DB_CONFIG',
 
     # json_processor.processor

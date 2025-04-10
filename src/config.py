@@ -46,8 +46,8 @@ class AdditionalUrls(Enum):
 
 # Database configuration
 SUPABASE_URL: str = os.environ["SUPABASE_URL"]
-SUPABASE_SERVICE_KEY: str = os.environ["SUPABASE_SERVICE_KEY"]
-SUPABASE_KEY: str = os.environ["SUPABASE_KEY"]
+SUPABASE_SECRET_KEY: str = os.environ["SUPABASE_SECRET_KEY"]
+SUPABASE_PUBLIC_KEY: str = os.environ["SUPABASE_PUBLIC_KEY"]
 
 # Database connection settings
 DB_CONFIG: Dict[str, Any] = {
