@@ -9,14 +9,20 @@ class Game(BaseModel):
     home_team_id: int # ID del equipo local
     away_team_id: int # ID del equipo visitante
     date: int # Fecha del partido (timestamp)
-    status: str # Estado del partido
+    game_status: str # Estado del partido
     _status: Status = Status.DESCONOCIDO # Estado del partido (automáticamente generado)
     home_team_score: int # Goles del equipo local
     away_team_score: int # Goles del equipo visitante
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        self._status = Status.from_value(value=self.status)
+        self._status = Status.from_value(value=self.game_status)
+
+    def _convert_date(self) -> str:
+        """
+        Converts a timestamp to a datetime object.
+        """
+        return datetime.fromtimestamp(timestamp=self.date).isoformat()
 
     @classmethod
     def from_dict(cls, data: dict) -> "Game":
@@ -35,8 +41,8 @@ class Game(BaseModel):
             "home_team_id": self.home_team_id,
             "away_team_id": self.away_team_id,
             "date": self.date,
-            "status": self.status,
-            "_status": self._status.value,
+            "game_status": self.game_status,
+            #"_status": self._status.value,
             "home_team_score": self.home_team_score,
             "away_team_score": self.away_team_score
         }

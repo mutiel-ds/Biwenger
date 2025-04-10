@@ -67,8 +67,8 @@ class Player(BaseModel):
             "player_id": self.player_id,
             "player_name": self.player_name,
             "player_position": self.player_position,
-            "_player_position": self._player_position.value,
-            "_player_position_name": self._player_position_name
+            #"_player_position": self._player_position.value,
+            #"_player_position_name": self._player_position_name
         }
 
     def __str__(self) -> str:

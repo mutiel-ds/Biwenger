@@ -95,8 +95,8 @@ class Event(BaseModel):
             "player_performance_id": str(object=self.player_performance_id),
             "event_type": self.event_type,
             "event_minute": self.event_minute,
-            "_event_description": self._event_description,
-            "_event_type": self._event_type.value
+            #"_event_description": self._event_description,
+            #"_event_type": self._event_type.value
         }
 
     def __str__(self) -> str:

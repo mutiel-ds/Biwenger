@@ -1,12 +1,23 @@
 import os
 import json
 from uuid import uuid4, UUID
+from datetime import datetime
 from pydantic import ValidationError
 from typing import List, Dict, Optional, Tuple
 
 from src.config import Credentials
 from src.scraper.scraper import BiwengerScraper
-from src.definitions import Season, Round, Game, PlayerPerformance, Event, Player, ScoringSystemType
+from src.definitions import (
+    Season,
+    Round, 
+    Game, 
+    PlayerPerformance, 
+    Event, 
+    Player,
+    Team, 
+    ScoringSystemType,
+    PerformanceScore
+)
 
 class BiwengerJSONProcessor:
     score: int
@@ -18,16 +29,6 @@ class BiwengerJSONProcessor:
         self.scoring_folder: str = self._get_scoring_folder(score=self.score)
         self.scraper: BiwengerScraper = BiwengerScraper(credentials=Credentials())
 
-    def set_scoring_system(self, score: int) -> None:
-        """
-        Cambia el sistema de puntuación a utilizar.
-        
-        Args:
-            score (int): Sistema de puntuación a utilizar.
-        """
-        self.scoring_folder: str = self._get_scoring_folder(score=score)
-        self.score = score
-        
     def _get_scoring_folder(self, score: int) -> str:
         """
         Devuelve la carpeta del sistema de puntuación a partir de su valor.
@@ -44,6 +45,16 @@ class BiwengerJSONProcessor:
             return folder
         else:
             raise ValueError("Sistema de puntuación no soportado.")
+        
+    def set_scoring_system(self, score: int) -> None:
+        """
+        Cambia el sistema de puntuación a utilizar.
+        
+        Args:
+            score (int): Sistema de puntuación a utilizar.
+        """
+        self.scoring_folder: str = self._get_scoring_folder(score=score)
+        self.score = score
         
     def _load_json(self, path: str) -> Dict:
         """
@@ -155,8 +166,8 @@ class BiwengerJSONProcessor:
         return Round(
             round_id=round_raw_data["data"]["id"],
             season_id=season,
-            name=round_raw_data["data"]["name"],
-            status=round_status
+            round_name=round_raw_data["data"]["name"],
+            round_status=round_status
         )
     
     def _get_season_rounds(self, season: int) -> List[Round]:
@@ -252,7 +263,7 @@ class BiwengerJSONProcessor:
                 home_team_id=game_raw_data["data"]["home"]["id"],
                 away_team_id=game_raw_data["data"]["away"]["id"],
                 date=game_raw_data["data"]["date"],
-                status=game_raw_data["data"]["status"],
+                game_status=game_raw_data["data"]["status"],
                 home_team_score=home_team_score,
                 away_team_score=away_team_score
             )
@@ -327,19 +338,21 @@ class BiwengerJSONProcessor:
         events: List[Event] = []
         for raw_event in events_raw_data:
             try:
+                event_id: UUID = uuid4()
                 event: Event = Event(
+                    event_id=event_id,
                     event_type=raw_event["type"],
                     player_performance_id=player_performance_id,
                     event_minute=raw_event["metadata"] if "metadata" in raw_event else -1,
                 )
             except (ValidationError, ValueError) as e:
-                return str(e)
+                return str(object=e)
             except KeyError as e:
-                return str(raw_event)
+                return str(object=raw_event)
             events.append(event)
         return events
     
-    def _get_player_game(self, player_raw_data: Dict, team_id: int, game_id: int) -> Tuple[PlayerPerformance, List[Event]]:
+    def _get_player_game(self, player_raw_data: Dict, team_id: int, game_id: int) -> Tuple[PlayerPerformance, List[Event], PerformanceScore]:
         """
         Procesa el rendimiento de un jugador en un partido específico.
         
@@ -351,9 +364,9 @@ class BiwengerJSONProcessor:
         Returns:
             PlayerPerformance: Rendimiento del jugador en el partido.
             List[Event]: Eventos del jugador en el partido.
+            PerformanceScore: Puntuación del jugador en el partido.
         """
-        player_performance_id: UUID = uuid4()
-        
+        player_performance_id: UUID = uuid4()        
         player_events: List[Event] | str = self._get_player_events(
             events_raw_data=player_raw_data["events"],
             player_performance_id=player_performance_id
@@ -366,13 +379,20 @@ class BiwengerJSONProcessor:
             player_performance_id=player_performance_id,
             player_id=player_raw_data["player"]["id"],
             game_id=game_id,
-            team_id=team_id,
-            points=player_raw_data["points"]
+            team_id=team_id
         )
 
-        return player_performance, player_events
+        score_id: UUID = uuid4()
+        performance_score: PerformanceScore = PerformanceScore(
+            score_id=score_id,
+            player_performance_id=player_performance_id,
+            scoring_system_id=self.score,
+            points=player_raw_data.get("points", None)
+        )
+
+        return player_performance, player_events, performance_score
     
-    def _get_game_performances(self, game_name: str, round: int, season: int, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event]]:
+    def _get_game_performances(self, game_name: str, round: int, season: int, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]:
         """
         Procesa las actuaciones de los jugadores en un partido específico.
         
@@ -383,16 +403,17 @@ class BiwengerJSONProcessor:
             score (int, optional): Sistema de puntuación a utilizar. Por defecto es el sistema de puntuación actual.
         
         Returns:
-            Tuple[List[PlayerPerformance], List[Event]]: Actuaciones de los jugadores y eventos del partido.
+            Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]: Actuaciones de los jugadores, eventos y puntuaciones del partido.
         """
         game_raw_data: Dict = self._load_game(game_name=game_name, round=round, season=season, score=score)
         
         player_performances: List[PlayerPerformance] = []
         events: List[Event] = []
+        performance_scores: List[PerformanceScore] = []
         
         for team in ["home", "away"]:
             for player_raw_data in game_raw_data["data"][team]["reports"]:
-                player_game: Tuple[PlayerPerformance , List[Event]] = self._get_player_game(
+                player_game: Tuple[PlayerPerformance, List[Event], PerformanceScore] = self._get_player_game(
                     player_raw_data=player_raw_data,
                     team_id=game_raw_data["data"][team]["id"],
                     game_id=game_raw_data["data"]["id"]
@@ -400,13 +421,15 @@ class BiwengerJSONProcessor:
                 
                 player_performance: PlayerPerformance = player_game[0]
                 player_events: List[Event] = player_game[1]
+                performance_score: PerformanceScore = player_game[2]
                 
                 player_performances.append(player_performance)
                 events.extend(player_events)
+                performance_scores.append(performance_score)
 
-        return player_performances, events
+        return player_performances, events, performance_scores
     
-    def _get_round_performances(self, round: int, season: int, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event]]:
+    def _get_round_performances(self, round: int, season: int, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]:
         """
         Procesa las actuaciones de los jugadores en una jornada específica.
         
@@ -416,7 +439,7 @@ class BiwengerJSONProcessor:
             score (int, optional): Sistema de puntuación a utilizar. Por defecto es el sistema de puntuación actual.
         
         Returns:
-            Tuple[List[PlayerPerformance], List[Event]]: Actuaciones de los jugadores y eventos de la jornada.
+            Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]: Actuaciones de los jugadores, eventos y puntuaciones de la jornada.
         """
         if score is None:
             scoring_folder: str = self.scoring_folder
@@ -425,11 +448,12 @@ class BiwengerJSONProcessor:
 
         round_performances: List[PlayerPerformance] = []
         round_events: List[Event] = []
+        round_scores: List[PerformanceScore] = []
         
         for game_name in os.listdir(path=os.path.join("data/JSONs/Games", scoring_folder, str(object=season), f"R{round}")):
             if game_name.endswith(".json"):
                 game_name: str = game_name[:-5]
-                game: Tuple[List[PlayerPerformance], List[Event]] = self._get_game_performances(
+                game: Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]] = self._get_game_performances(
                     game_name=game_name,
                     round=round,
                     season=season,
@@ -438,13 +462,15 @@ class BiwengerJSONProcessor:
 
                 game_performances: List[PlayerPerformance] = game[0]
                 game_events: List[Event] = game[1]
+                game_scores: List[PerformanceScore] = game[2]
                 
                 round_performances.extend(game_performances)
                 round_events.extend(game_events)
+                round_scores.extend(game_scores)
 
-        return round_performances, round_events
+        return round_performances, round_events, round_scores
 
-    def _get_season_performances(self, season: int, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event]]:
+    def _get_season_performances(self, season: int, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]:
         """
         Procesa las actuaciones de los jugadores en una temporada específica.
         
@@ -453,7 +479,7 @@ class BiwengerJSONProcessor:
             score (int, optional): Sistema de puntuación a utilizar. Por defecto es el sistema de puntuación actual.
         
         Returns:
-            Tuple[List[PlayerPerformance], List[Event]]: Actuaciones de los jugadores y eventos de la temporada.
+            Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]: Actuaciones de los jugadores, eventos y puntuaciones de la temporada.
         """
         if score is None:
             scoring_folder: str = self.scoring_folder
@@ -462,11 +488,12 @@ class BiwengerJSONProcessor:
 
         season_performances: List[PlayerPerformance] = []
         season_events: List[Event] = []
+        season_scores: List[PerformanceScore] = []
 
         for round in os.listdir(path=os.path.join("data/JSONs/Games", scoring_folder, str(object=season))):
             if os.path.isdir(s=os.path.join("data/JSONs/Games", scoring_folder, str(object=season), round)):
                 round_id: int = int(round[1:])
-                round_performances: Tuple[List[PlayerPerformance], List[Event]] = self._get_round_performances(
+                round_performances: Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]] = self._get_round_performances(
                     round=round_id,
                     season=season,
                     score=score
@@ -474,13 +501,15 @@ class BiwengerJSONProcessor:
 
                 performances: List[PlayerPerformance] = round_performances[0]
                 events: List[Event] = round_performances[1]
+                scores: List[PerformanceScore] = round_performances[2]
 
                 season_performances.extend(performances)
                 season_events.extend(events)
+                season_scores.extend(scores)
 
-        return season_performances, season_events
+        return season_performances, season_events, season_scores
 
-    def get_performances(self, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event]]:
+    def get_performances(self, score: Optional[int] = None) -> Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]:
         """
         Devuelve las actuaciones de los jugadores y eventos de la temporada actual.
         
@@ -488,7 +517,7 @@ class BiwengerJSONProcessor:
             score (int, optional): Sistema de puntuación a utilizar. Por defecto es el sistema de puntuación actual.
         
         Returns:
-            Tuple[List[PlayerPerformance], List[Event]]: Actuaciones de los jugadores y eventos de la temporada.
+            Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]]: Actuaciones de los jugadores, eventos y puntuaciones de la temporada.
         """
         if score is None:
             scoring_folder: str = self.scoring_folder
@@ -497,19 +526,21 @@ class BiwengerJSONProcessor:
 
         performances: List[PlayerPerformance] = []
         events: List[Event] = []
+        scores: List[PerformanceScore] = []
 
         for season in os.listdir(path=os.path.join("data/JSONs/Games", scoring_folder)):
             if os.path.isdir(s=os.path.join("data/JSONs/Games", scoring_folder, season)):
                 season_id: int = int(season)
-                season_performances: Tuple[List[PlayerPerformance], List[Event]] = self._get_season_performances(
+                season_performances: Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]] = self._get_season_performances(
                     season=season_id,
                     score=score
                 )
 
                 performances.extend(season_performances[0])
                 events.extend(season_performances[1])
+                scores.extend(season_performances[2])
         
-        return performances, events
+        return performances, events, scores
 
     def _get_player(self, player_raw_data: Dict) -> Player:
         """
@@ -607,6 +638,101 @@ class BiwengerJSONProcessor:
                 players.extend(self._get_season_players(season=season_id, seen_player_ids=seen_player_ids))
         
         return players
+    
+    def _get_team(self, team_raw_data: Dict) -> Team:
+        """
+        Procesa los datos de un equipo y devuelve su información.
+
+        Args:
+            team_raw_data (dict): Datos del equipo.
+
+        Returns:
+            Team: Información del equipo.
+        """
+        return Team(
+            team_id=team_raw_data["id"],
+            team_name=team_raw_data["name"]
+        )
+    
+    def _get_game_teams(self, game_name: str, round: int, season: int, seen_teams_ids: set) -> List[Team]:
+        """
+        Procesa los equipos de un partido específico.
+        
+        Args:
+            game_name (str): Nombre del archivo JSON del partido.
+            round (int): Número de la jornada.
+            season (int): Año de la temporada.
+            seen_teams_ids (set): Conjunto de IDs de equipos ya procesados.
+        
+        Returns:
+            List[Team]: Lista de equipos en el partido.
+        """
+        game_raw_data: Dict = self._load_game(game_name=game_name, round=round, season=season)
+        
+        teams: List[Team] = []
+        for team in ["home", "away"]:
+            team_id: int = game_raw_data["data"][team]["id"]
+            if team_id not in seen_teams_ids:
+                seen_teams_ids.add(team_id)
+                teams.append(self._get_team(team_raw_data=game_raw_data["data"][team]))
+        
+        return teams
+    
+    def _get_round_teams(self, round: int, season: int, seen_teams_ids: set) -> List[Team]:
+        """
+        Procesa los equipos de una jornada específica.
+        
+        Args:
+            round (int): ID de la jornada.
+            season (int): ID de la temporada.
+            seen_teams_ids (set): Conjunto de IDs de equipos ya procesados.
+        
+        Returns:
+            List[Team]: Lista de equipos en la jornada.
+        """
+        teams: List[Team] = []
+        for game_name in os.listdir(path=os.path.join("data/JSONs/Games", self.scoring_folder, str(object=season), f"R{round}")):
+            if game_name.endswith(".json"):
+                game_name: str = game_name[:-5]
+                teams.extend(self._get_game_teams(game_name=game_name, round=round, season=season, seen_teams_ids=seen_teams_ids))
+        
+        return teams
+    
+    def _get_season_teams(self, season: int, seen_teams_ids: set) -> List[Team]:
+        """
+        Procesa los equipos de una temporada específica.
+        
+        Args:
+            season (int): ID de la temporada.
+            seen_teams_ids (set): Conjunto de IDs de equipos ya procesados.
+        
+        Returns:
+            List[Team]: Lista de equipos en la temporada.
+        """
+        teams: List[Team] = []
+        for round in os.listdir(path=os.path.join("data/JSONs/Games", self.scoring_folder, str(object=season))):
+            if os.path.isdir(s=os.path.join("data/JSONs/Games", self.scoring_folder, str(object=season), round)):
+                round_id: int = int(round[1:])
+                teams.extend(self._get_round_teams(round=round_id, season=season, seen_teams_ids=seen_teams_ids))
+        
+        return teams
+    
+    def get_teams(self) -> List[Team]:
+        """
+        Devuelve una lista con todos los equipos disponibles.
+
+        Returns:
+            List[Team]: Lista de equipos.
+        """
+        teams: List[Team] = []
+        seen_teams_ids: set = set()
+        
+        for season in os.listdir(path=os.path.join("data/JSONs/Games", self.scoring_folder)):
+            if os.path.isdir(s=os.path.join("data/JSONs/Games", self.scoring_folder, season)):
+                season_id: int = int(season)
+                teams.extend(self._get_season_teams(season=season_id, seen_teams_ids=seen_teams_ids))
+        
+        return teams
 
 if __name__ == "__main__":
     processor: BiwengerJSONProcessor = BiwengerJSONProcessor()
@@ -623,12 +749,17 @@ if __name__ == "__main__":
         print(game)
         break
     
-    performances: Tuple[List[PlayerPerformance], List[Event]] = processor.get_performances()
-    for performance, event in zip(performances[0], performances[1]):
+    performances: Tuple[List[PlayerPerformance], List[Event], List[PerformanceScore]] = processor.get_performances()
+    for performance, event, score in zip(performances[0], performances[1], performances[2]):
         print(performance)
         print(event)
+        print(score)
         break
 
     for player in processor.get_players():
         print(player)
+        break
+
+    for team in processor.get_teams():
+        print(team)
         break
