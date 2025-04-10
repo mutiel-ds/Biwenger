@@ -4,7 +4,7 @@ from postgrest.base_request_builder import APIResponse
 
 from src.db_processor.connection import DatabaseConnection
 from src.json_processor.processor import BiwengerJSONProcessor
-from src.json_processor.definitions import Season
+from src.definitions import Season
 
 import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

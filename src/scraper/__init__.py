@@ -1,20 +1,16 @@
-from src.scraper.config import (
-    MyCredential,
+from src.config import (
     Credentials,
     Headers,
-    APIUrls,
-    ScoringSystem
+    APIUrls
 )
 
 from src.scraper.scraper import BiwengerScraper
 from src.scraper.wrapper import GameDataExtractor
 
 __all__ = [
-    "MyCredential",
     "Credentials",
     "Headers",
     "APIUrls",
-    "ScoringSystem",
     "BiwengerScraper",
     "GameDataExtractor"
 ]

@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-from src.json_processor.definitions.status import Status
+from src.definitions.status import Status
 
 class Game(BaseModel):
     game_id: int # ID del partido

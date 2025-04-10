@@ -5,8 +5,9 @@ from datetime import datetime
 from typing import Dict, Optional
 
 from src.utils import wait
+from src.definitions import ScoringSystemType
 from src.scraper.wrapper import GameDataExtractor
-from src.scraper.config import ScoringSystem, Credentials
+from src.config import Credentials
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -23,7 +24,7 @@ class BiwengerScraper:
         Args:
             score (int): Sistema de puntuación.
         """
-        scoring_system: ScoringSystem = ScoringSystem.from_value(value=score)
+        scoring_system: ScoringSystemType = ScoringSystemType.from_value(value=score)
         folder: str = scoring_system.get_scoring_system()
         if folder != "Sistema de puntuación desconocido":
             return folder
@@ -150,7 +151,7 @@ class BiwengerScraper:
                 logging.info(msg=f"\t\t-Datos de la jornada {round_name} guardados correctamente.")
                 #wait()
 
-    def save_games_data(self, score: int = ScoringSystem.PICAS.value) -> None:
+    def save_games_data(self, score: int = ScoringSystemType.PICAS.value) -> None:
         """
         Guarda los datos de los partidos en formato JSON.
 
@@ -198,7 +199,7 @@ class BiwengerScraper:
 
 if __name__ == "__main__":
     my_credentials: Credentials = Credentials()
-    scoring_system: ScoringSystem = ScoringSystem.SOFASCORE
+    scoring_system: ScoringSystemType = ScoringSystemType.SOFASCORE
     
     scraper: BiwengerScraper = BiwengerScraper(credentials=my_credentials)
     

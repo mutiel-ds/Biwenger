@@ -1,10 +1,10 @@
-from typing import Optional, Any
+from typing import Optional, Any, Dict
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from supabase import create_client, Client
+from supabase import create_client, Client, ClientOptions
 
-from src.db_processor.config import SUPABASE_URL, SUPABASE_SERVICE_KEY, SUPABASE_KEY, DB_CONFIG
+from src.config import SUPABASE_URL, SUPABASE_KEY, SUPABASE_SERVICE_KEY, DB_CONFIG
 
 class DatabaseConnection:
     _instance: Optional['DatabaseConnection'] = None
@@ -17,15 +17,38 @@ class DatabaseConnection:
         return cls._instance
 
     def __init__(self) -> None:
+        self._init_supabase()
+
+    def _init_supabase(self) -> None:
+        """
+        Initialize Supabase client
+        """
         if not self._supabase:
             if not SUPABASE_URL or not SUPABASE_KEY:
                 raise ValueError("Supabase URL and Key must be provided in environment variables")
             self._supabase = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_SERVICE_KEY)
-        
+
+    def _init_pg_conn(self) -> None:
+        """
+        Initialize PostgreSQL connection
+        """
         if not self._pg_conn:
             if not all(DB_CONFIG.values()):
                 raise ValueError("Database configuration must be provided in environment variables")
             self._pg_conn: Any = psycopg2.connect(**DB_CONFIG, cursor_factory=RealDictCursor)
+
+    def connect_schema(self, schema: str) -> None:
+        """
+        Connect to Database schema
+        """
+        if not self._supabase:
+            raise RuntimeError("Supabase client not initialized")
+        
+        self._supabase = create_client(
+            supabase_url=SUPABASE_URL,
+            supabase_key=SUPABASE_SERVICE_KEY,
+            options=ClientOptions(schema=schema)
+        )
 
     @property
     def supabase(self) -> Client:
@@ -46,11 +69,15 @@ class DatabaseConnection:
         return self._pg_conn
 
     def close(self) -> None:
-        """Close database connections"""
+        """
+        Close database connections
+        """
         if self._pg_conn:
             self._pg_conn.close()
             self._pg_conn = None
 
     def __del__(self) -> None:
-        """Cleanup when object is destroyed"""
+        """
+        Cleanup when object is destroyed
+        """
         self.close() 

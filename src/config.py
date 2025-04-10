@@ -2,14 +2,13 @@ import os
 from dotenv import load_dotenv
 
 from enum import Enum
-from typing import Dict
+from typing import Dict, Any
 
 load_dotenv()
 
 # Credenciales y configuración
-class MyCredential(Enum):
-    BIWENGER_EMAIL = os.environ["BIWENGER_EMAIL"]
-    BIWENGER_PASSWORD = os.environ["BIWENGER_PASSWORD"]
+BIWENGER_EMAIL: str = os.environ["BIWENGER_EMAIL"]
+BIWENGER_PASSWORD: str = os.environ["BIWENGER_PASSWORD"]
 
 class Credentials:
     email: str
@@ -17,8 +16,8 @@ class Credentials:
 
     def __init__(
         self,
-        email: str = MyCredential.BIWENGER_EMAIL.value,
-        password: str = MyCredential.BIWENGER_PASSWORD.value
+        email: str = BIWENGER_EMAIL,
+        password: str = BIWENGER_PASSWORD
     ) -> None:
         self.email = email
         self.password = password
@@ -45,36 +44,16 @@ class AdditionalUrls(Enum):
     JORNADA_DATA_URL_TEMPLATE = "https://biwenger.as.com/api/v2/rounds/la-liga/{round_id}"
     USER_DATA_URL_TEMPLATE = "https://biwenger.as.com/api/v2/user?fields=*,lineup"
 
-# Sistema de Puntuaciones
-class ScoringSystem(Enum):
-    PICAS = 1
-    SOFASCORE = 2
-    MEDIA = 5
+# Database configuration
+SUPABASE_URL: str = os.environ["SUPABASE_URL"]
+SUPABASE_SERVICE_KEY: str = os.environ["SUPABASE_SERVICE_KEY"]
+SUPABASE_KEY: str = os.environ["SUPABASE_KEY"]
 
-    @classmethod
-    def from_value(cls, value: int) -> "ScoringSystem":
-        """
-        Devuelve un objeto ScoringSystem a partir de su valor.
-        """
-        for scoring_system in cls:
-            if scoring_system.value == value:
-                return scoring_system
-        raise ValueError("Valor de sistema de puntuación no soportado.")
-    
-    def get_value(self) -> int:
-        """
-        Devuelve el valor de un objeto ScoringSystem.
-        """
-        return self.value
-    
-    def get_scoring_system(self) -> str:
-        """
-        Devuelve la descripción de un objeto ScoringSystem.
-        """
-        descriptions: Dict[ScoringSystem, str] = {
-            ScoringSystem.PICAS: "Picas",
-            ScoringSystem.SOFASCORE: "SofaScore",
-            ScoringSystem.MEDIA: "Media"
-        }
-
-        return descriptions.get(self, "Sistema de puntuación desconocido")
+# Database connection settings
+DB_CONFIG: Dict[str, Any] = {
+    "host": os.environ["DB_HOST"],
+    "port": os.environ["DB_PORT"],
+    "database": os.environ["DB_NAME"],
+    "user": os.environ["DB_USER"],
+    "password": os.environ["DB_PASSWORD"]
+} 

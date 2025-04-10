@@ -1,17 +1,19 @@
 from src.utils import wait
 
-from src.scraper import (
-    MyCredential,
+from src.config import (
     Credentials,
     Headers,
     APIUrls,
-    ScoringSystem
+    AdditionalUrls
 )
-from src.scraper import BiwengerScraper
-from src.scraper import GameDataExtractor
+from src.config import (
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    SUPABASE_SERVICE_KEY,
+    DB_CONFIG
+)
 
-from src.json_processor import BiwengerJSONProcessor
-from src.json_processor import (
+from src.definitions import (
     Event,
     Player,
     PlayerPerformance,
@@ -19,14 +21,17 @@ from src.json_processor import (
     Game,
     Status,
     Season,
-    Round
+    Round,
+    ScoringSystemType,
+    ScoringSystem,
+    PerformanceScore
 )
 
-from src.db_processor import (
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    DB_CONFIG
-)
+from src.scraper import BiwengerScraper
+from src.scraper import GameDataExtractor
+
+from src.json_processor import BiwengerJSONProcessor
+
 from src.db_processor import DatabaseConnection
 
 __all__ = [
@@ -40,11 +45,10 @@ __all__ = [
     'GameDataExtractor',
 
     # scraper.config
-    'MyCredential',
     'Credentials',
     'Headers',
     'APIUrls',
-    'ScoringSystem',
+    'AdditionalUrls',
 
     # db_processor.connection
     'DatabaseConnection',
@@ -52,6 +56,7 @@ __all__ = [
     # db_processor.config
     'SUPABASE_URL',
     'SUPABASE_KEY',
+    'SUPABASE_SERVICE_KEY',
     'DB_CONFIG',
 
     # json_processor.processor
@@ -65,5 +70,8 @@ __all__ = [
     'Game',
     'Status',
     'Season',
-    'Round'
+    'Round',
+    'ScoringSystemType',
+    'ScoringSystem',
+    'PerformanceScore'
 ]

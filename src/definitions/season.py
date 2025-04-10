@@ -1,7 +1,7 @@
 from typing import Dict
 from pydantic import BaseModel
 
-from src.json_processor.definitions.status import Status
+from src.definitions.status import Status
 
 class Season(BaseModel):
     season_id: int # ID de la temporada

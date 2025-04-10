@@ -4,9 +4,9 @@ from uuid import uuid4, UUID
 from pydantic import ValidationError
 from typing import List, Dict, Optional, Tuple
 
-from src.scraper.config import Credentials, ScoringSystem
+from src.config import Credentials
 from src.scraper.scraper import BiwengerScraper
-from src.json_processor.definitions import Season, Round, Game, PlayerPerformance, Event, Player
+from src.definitions import Season, Round, Game, PlayerPerformance, Event, Player, ScoringSystemType
 
 class BiwengerJSONProcessor:
     score: int
@@ -38,7 +38,7 @@ class BiwengerJSONProcessor:
         Returns:
             str: Nombre de la carpeta del sistema de puntuación.
         """
-        scoring_system: ScoringSystem = ScoringSystem.from_value(value=score)
+        scoring_system: ScoringSystemType = ScoringSystemType.from_value(value=score)
         folder: str = scoring_system.get_scoring_system()
         if folder != "Sistema de puntuación desconocido":
             return folder
