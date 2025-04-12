@@ -48,10 +48,14 @@ class ScoringSystem(BaseModel):
         self.scoring_system_type = ScoringSystemType.from_value(value=self.scoring_system_id)
 
 class PerformanceScore(BaseModel):
-    score_id: UUID = uuid4() # ID de la puntuacion
-    player_performance_id: UUID # ID de la actuación del jugador
+    score_id: str = "" # ID de la puntuacion
+    player_performance_id: str # ID de la actuación del jugador
     scoring_system_id: int # ID del sistema de puntuación
     points: int | None # Puntos obtenidos por el jugador
+
+    def __init__(self, **data) -> None:
+        super().__init__(**data)
+        self.score_id = f"{self.player_performance_id}_{self.scoring_system_id}"
 
     def __str__(self) -> str:
         """
@@ -64,6 +68,8 @@ class PerformanceScore(BaseModel):
         """
         Crea un objeto PerformanceScore a partir de un diccionario.
         """
+        if "score_id" in data:
+            del data["score_id"]
         return cls(**data)
     
     def to_dict(self) -> Dict:
@@ -71,8 +77,8 @@ class PerformanceScore(BaseModel):
         Convierte el objeto PerformanceScore a un diccionario.
         """
         return {
-            "score_id": str(object=self.score_id),
-            "player_performance_id": str(object=self.player_performance_id),
+            "score_id": self.score_id,
+            "player_performance_id": self.player_performance_id,
             "scoring_system_id": self.scoring_system_id,
             "points": self.points
         }

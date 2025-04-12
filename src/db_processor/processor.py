@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Set
 from postgrest.exceptions import APIError
 from postgrest.base_request_builder import APIResponse
 
+from src.config import PK_COLUMNS
 from src.db_processor.connection import DatabaseConnection
 from src.json_processor.processor import BiwengerJSONProcessor
 from src.definitions import (
@@ -76,9 +77,13 @@ class BiwengerDBProcessor:
         Uploads all seasons to the database.
         """
         seasons: List[Season] = self.json_processor.get_seasons()
-        for season in seasons:
-            self._post_season(season=season)
-        logging.info(msg=f"Uploaded {len(seasons)} seasons to the database.")
+        seasons_data: List[Dict] = [season.to_dict() for season in seasons]
+        total_seasons: int = len(seasons_data)
+        try:
+            self.db.supabase.table(table_name="seasons").insert(json=seasons_data).execute()
+            logging.info(msg=f"Uploaded {total_seasons} seasons to the database in batch operations.")
+        except APIError as e:
+            logging.error(msg=f"Error uploading batch of seasons: (code:{e.code}) {e.message} [details:'{e.details}']")
     
     def _post_round(self, round: Round) -> None:
         """
@@ -97,9 +102,13 @@ class BiwengerDBProcessor:
         Uploads all rounds to the database.
         """
         rounds: List[Round] = self.json_processor.get_rounds()
-        for round in rounds:
-            self._post_round(round=round)
-        logging.info(msg=f"Uploaded {len(rounds)} rounds to the database.")
+        rounds_data: List[Dict] = [round.to_dict() for round in rounds]
+        total_rounds: int = len(rounds_data)
+        try:
+            self.db.supabase.table(table_name="rounds").insert(json=rounds_data).execute()
+            logging.info(msg=f"Uploaded {total_rounds} rounds to the database in batch operations.")
+        except APIError as e:
+            logging.error(msg=f"Error uploading batch of rounds: (code:{e.code}) {e.message} [details:'{e.details}']")
 
     def _post_team(self, team: Team) -> None:
         """
@@ -118,9 +127,13 @@ class BiwengerDBProcessor:
         Uploads all teams to the database.
         """
         teams: List[Team] = self.json_processor.get_teams()
-        for team in teams:
-            self._post_team(team=team)
-        logging.info(msg=f"Uploaded {len(teams)} teams to the database.")
+        teams_data: List[Dict] = [team.to_dict() for team in teams]
+        total_teams: int = len(teams_data)
+        try:
+            self.db.supabase.table(table_name="teams").insert(json=teams_data).execute()
+            logging.info(msg=f"Uploaded {total_teams} teams to the database in batch operations.")
+        except APIError as e:
+            logging.error(msg=f"Error uploading batch of teams: (code:{e.code}) {e.message} [details:'{e.details}']")
 
     def _post_game(self, game: Game) -> None:
         """
@@ -139,9 +152,13 @@ class BiwengerDBProcessor:
         Uploads all games to the database.
         """
         games: List[Game] = self.json_processor.get_games()
-        for game in games:
-            self._post_game(game=game)
-        logging.info(msg=f"Uploaded {len(games)} games to the database.")
+        games_data: List[Dict] = [game.to_dict() for game in games]
+        total_games: int = len(games_data)
+        try:
+            self.db.supabase.table(table_name="games").insert(json=games_data).execute()
+            logging.info(msg=f"Uploaded {total_games} games to the database in batch operations.")
+        except APIError as e:
+            logging.error(msg=f"Error uploading batch of games: (code:{e.code}) {e.message} [details:'{e.details}']")
 
     def _post_player(self, player: Player) -> None:
         """
@@ -160,9 +177,13 @@ class BiwengerDBProcessor:
         Uploads all players to the database.
         """
         players: List[Player] = self.json_processor.get_players()
-        for player in players:
-            self._post_player(player=player)
-        logging.info(msg=f"Uploaded {len(players)} players to the database.")
+        players_data: List[Dict] = [player.to_dict() for player in players]
+        total_players: int = len(players)
+        try:
+            self.db.supabase.table(table_name="players").insert(json=players_data).execute()
+            logging.info(msg=f"Uploaded {total_players} players to the database in batch operations.")
+        except APIError as e:
+            logging.error(msg=f"Error uploading batch of players: (code:{e.code}) {e.message} [details:'{e.details}']")
 
     def _post_player_performance(self, player_performance: PlayerPerformance) -> None:
         """
@@ -280,7 +301,7 @@ class BiwengerDBProcessor:
         if post_scores:
             self._post_player_scores(scores=scores)
 
-    def delete_all_rows(self, table_name: str) -> None:
+    def delete_table_data(self, table_name: str) -> None:
         """
         Deletes all rows from a specified table in the database.
         
@@ -292,35 +313,39 @@ class BiwengerDBProcessor:
         """
         logging.info(msg=f"Deleting all rows from table: {table_name}")
         try:
-            # Map of table names to their primary key columns
-            pk_columns: Dict[str, str] = {
-                "player_performances": "player_performance_id",
-                "events": "event_id",
-                "performance_scores": "score_id",
-                "players": "player_id",
-                "teams": "team_id",
-                "games": "game_id",
-                "seasons": "season_id",
-                "rounds": "round_id"
-            }
-            
-            # Get the primary key column for the table
-            pk_column: str = pk_columns[table_name]
-            
-            if not pk_column:
+            pk: Dict = PK_COLUMNS.get(table_name, {})
+            if not pk:
                 logging.error(msg=f"Unknown primary key column for table: {table_name}")
                 return
             
-            # Execute a DELETE operation using the primary key column
-            self.db.supabase.table(table_name=table_name).delete().neq(column=pk_column, value=uuid4()).execute()
-            
+            pk_column: str = pk["column"]
+            pk_value: int | str = pk["value"]
+            self.db.supabase.table(table_name=table_name).delete().neq(column=pk_column, value=pk_value).execute()            
             logging.info(msg=f"Successfully deleted all rows from table: {table_name}")
+
         except APIError as e:
             logging.error(msg=f"Error deleting rows from table {table_name}: (code:{e.code}) {e.message} [details:'{e.details}']")
 
-if __name__ == "__main__":
-    processor: BiwengerDBProcessor = BiwengerDBProcessor()
-    processor.delete_all_rows(table_name="performance_scores")
-    processor.delete_all_rows(table_name="events")
-    processor.delete_all_rows(table_name="player_performances")
+    def delete_data(self) -> None:
+        """
+        Deletes all data from  the database.
+        """
+        logging.info(msg="Deleting all data from the database")
+        for table_name in PK_COLUMNS.keys():
+            self.delete_table_data(table_name=table_name)
+
+def main() -> None:
+    """
+    Main function to run the BiwengerDBProcessor.
+    """
+    processor = BiwengerDBProcessor()
+    processor.delete_data()
+    processor.post_seasons()
+    processor.post_rounds()
+    processor.post_teams()
+    processor.post_players()
+    processor.post_games()
     processor.post_performances()
+
+if __name__ == "__main__":
+    main()

@@ -324,7 +324,7 @@ class BiwengerJSONProcessor:
 
         return games
     
-    def _get_player_events(self, events_raw_data: List[Dict], player_performance_id: UUID) -> List[Event] | str:
+    def _get_player_events(self, events_raw_data: List[Dict], player_performance_id: str) -> List[Event] | str:
         """
         Procesa los eventos de un jugador en un partido específico.
         
@@ -338,12 +338,10 @@ class BiwengerJSONProcessor:
         events: List[Event] = []
         for raw_event in events_raw_data:
             try:
-                event_id: UUID = uuid4()
                 event: Event = Event(
-                    event_id=event_id,
                     event_type=raw_event["type"],
                     player_performance_id=player_performance_id,
-                    event_minute=raw_event["metadata"] if "metadata" in raw_event else -1,
+                    event_minute=raw_event["metadata"] if "metadata" in raw_event else None,
                 )
             except (ValidationError, ValueError) as e:
                 return str(object=e)
@@ -366,26 +364,22 @@ class BiwengerJSONProcessor:
             List[Event]: Eventos del jugador en el partido.
             PerformanceScore: Puntuación del jugador en el partido.
         """
-        player_performance_id: UUID = uuid4()        
-        player_events: List[Event] | str = self._get_player_events(
-            events_raw_data=player_raw_data["events"],
-            player_performance_id=player_performance_id
-        ) if "events" in player_raw_data else []
-
-        if isinstance(player_events, str):
-            raise ValueError(f"Error al procesar los eventos del jugador {player_raw_data['player']['name']} en {game_id}: {player_events}")
-
         player_performance: PlayerPerformance = PlayerPerformance(
-            player_performance_id=player_performance_id,
             player_id=player_raw_data["player"]["id"],
             game_id=game_id,
             team_id=team_id
         )
 
-        score_id: UUID = uuid4()
+        player_events: List[Event] | str = self._get_player_events(
+            events_raw_data=player_raw_data["events"],
+            player_performance_id=player_performance.player_performance_id
+        ) if "events" in player_raw_data else []
+
+        if isinstance(player_events, str):
+            raise ValueError(f"Error al procesar los eventos del jugador {player_raw_data['player']['name']} en {game_id}: {player_events}")
+
         performance_score: PerformanceScore = PerformanceScore(
-            score_id=score_id,
-            player_performance_id=player_performance_id,
+            player_performance_id=player_performance.player_performance_id,
             scoring_system_id=self.score,
             points=player_raw_data.get("points", None)
         )

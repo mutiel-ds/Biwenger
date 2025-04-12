@@ -66,9 +66,7 @@ class Player(BaseModel):
         return {
             "player_id": self.player_id,
             "player_name": self.player_name,
-            "player_position": self.player_position,
-            #"_player_position": self._player_position.value,
-            #"_player_position_name": self._player_position_name
+            "player_position": self.player_position
         }
 
     def __str__(self) -> str:
@@ -78,18 +76,22 @@ class Player(BaseModel):
         return f"{'-' * 30}\nJugador: {self.player_name}\nID: {self.player_id}\nPosición: {self._player_position_name}\n{'-' * 30}"
 
 class PlayerPerformance(BaseModel):
-    player_performance_id: UUID = uuid4() # ID único de la actuación del jugador (automáticamente generado)
+    player_performance_id: str = "" # ID único de la actuación del jugador (automáticamente generado)
     player_id: int # ID del jugador
     game_id: int # ID del partido
     team_id: int # ID del equipo
+
+    def __init__(self, **data) -> None:
+        super().__init__(**data)
+        self.player_performance_id = f"{self.player_id}_{self.game_id}_{self.team_id}"
 
     @classmethod
     def from_dict(cls, data: dict) -> "PlayerPerformance":
         """
         Crea un objeto PlayerPerformance a partir de un diccionario.
         """
-        if "player_performance_id" in data and isinstance(data["player_performance_id"], str):
-            data["player_performance_id"] = UUID(hex=data["player_performance_id"])
+        if "player_performance_id" in data:
+            del data["player_performance_id"]
         return cls(**data)
 
     def to_dict(self) -> dict:
@@ -97,7 +99,7 @@ class PlayerPerformance(BaseModel):
         Convierte el objeto PlayerPerformance a un diccionario.
         """
         return {
-            "player_performance_id": str(object=self.player_performance_id),
+            "player_performance_id": self.player_performance_id,
             "player_id": self.player_id,
             "game_id": self.game_id,
             "team_id": self.team_id

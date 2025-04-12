@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from enum import Enum
+from uuid import uuid4
 from typing import Dict, Any
 
 load_dotenv()
@@ -44,16 +45,52 @@ class AdditionalUrls(Enum):
     JORNADA_DATA_URL_TEMPLATE = "https://biwenger.as.com/api/v2/rounds/la-liga/{round_id}"
     USER_DATA_URL_TEMPLATE = "https://biwenger.as.com/api/v2/user?fields=*,lineup"
 
-# Database configuration
+# SUpabase DB configuration
 SUPABASE_URL: str = os.environ["SUPABASE_URL"]
 SUPABASE_SECRET_KEY: str = os.environ["SUPABASE_SECRET_KEY"]
 SUPABASE_PUBLIC_KEY: str = os.environ["SUPABASE_PUBLIC_KEY"]
 
-# Database connection settings
+# Postgres DB configuration
 DB_CONFIG: Dict[str, Any] = {
     "host": os.environ["DB_HOST"],
     "port": os.environ["DB_PORT"],
     "database": os.environ["DB_NAME"],
     "user": os.environ["DB_USER"],
     "password": os.environ["DB_PASSWORD"]
-} 
+}
+
+# Database PKs
+PK_COLUMNS: Dict[str, Dict] = {
+    "events": {
+        "column": os.environ["EVENTS"],
+        "value": "None"
+    },
+    "performance_scores": {
+        "column": os.environ["PERFORMANCE_SCORES"],
+        "value": "None"
+    },
+    "player_performances": {
+        "column": os.environ["PLAYER_PERFORMANCES"],
+        "value": "None"
+    },
+    "players": {
+        "column": os.environ["PLAYERS"],
+        "value": -1
+    },
+    "games": {
+        "column": os.environ["GAMES"],
+        "value": -1
+    },
+    "teams": {
+        "column": os.environ["TEAMS"],
+        "value": -1
+    },
+    "rounds": {
+        "column": os.environ["ROUNDS"],
+        "value": -1
+    },
+    "seasons": {
+        "column": os.environ["SEASONS"],
+        "value": -1
+    },
+}

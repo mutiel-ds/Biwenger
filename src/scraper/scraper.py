@@ -199,7 +199,7 @@ class BiwengerScraper:
 
 if __name__ == "__main__":
     my_credentials: Credentials = Credentials()
-    scoring_system: ScoringSystemType = ScoringSystemType.SOFASCORE
+    scoring_system: ScoringSystemType = ScoringSystemType.MEDIA
     
     scraper: BiwengerScraper = BiwengerScraper(credentials=my_credentials)
     
